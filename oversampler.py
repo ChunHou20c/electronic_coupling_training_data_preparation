@@ -2,7 +2,6 @@
 This module will do a oversampling by making possible permutations from the colomb matrix
 """
 import numpy as np
-import itertools
 
 def isomorphic_matrix(coulomb_matrix:np.ndarray, size:int, n:int, is_pair:bool = True):
     """
@@ -25,15 +24,21 @@ def isomorphic_matrix(coulomb_matrix:np.ndarray, size:int, n:int, is_pair:bool =
     
     return list_to_return
     
+def normal_noise(coulomb_matrix:np.ndarray, size:int, shape:tuple, standard_deviation:float = 0.5):
+    """
+    this function add a normal noise to the coulomb matrix by randomly generated noise
+    increase standard deviation to make higher noise
+    """
 
-matrix = np.load('cleaned_cm_positive/matrix.npy')
+    
+    cm_list = []
+    for _ in range(size):
+        
+        random_noise = np.random.normal(100, standard_deviation, shape)
+        altered_cm = random_noise*coulomb_matrix/100
 
-ls = isomorphic_matrix(matrix[0],56,230,True)
+        cm_list.append(altered_cm)
+    
+    return cm_list
 
-for cm1, cm2 in itertools.combinations(ls,2):
 
-    if(np.array_equal(cm1, cm2)):
-
-        print('duplication found')
-
-print(len(ls))
