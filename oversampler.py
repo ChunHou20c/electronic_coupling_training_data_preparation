@@ -42,3 +42,32 @@ def normal_noise(coulomb_matrix:np.ndarray, size:int, shape:tuple, standard_devi
     return cm_list
 
 
+def gen_noisy_dataset(coulomb_matrix:np.ndarray, coupling:np.ndarray, duplication_count:int)->tuple[np.ndarray, np.ndarray]:
+    """
+    arguments:
+
+    coulomb_matrix - list of the coulomb matrix
+    coupling - list of coupling correspond its coulomb matrix
+    duplication_count - number of duplication to generate
+
+    return:
+    noisy_coulomb_matrix, coupling
+    """
+
+
+    modified_matrix = []
+    modified_matrix_coupling = []
+
+    for Matrix, Coupling in zip(coulomb_matrix, coupling):
+        
+        noisy_matrices = normal_noise(Matrix, size = duplication_count, shape = Matrix.shape, standard_deviation = 0.5)
+        list_of_generated_matrix = [Matrix] + noisy_matrices
+        list_of_coupling = [Coupling]*(duplication_count+1)
+        
+        modified_matrix += list_of_generated_matrix
+        modified_matrix_coupling += list_of_coupling
+
+    feature = np.array(modified_matrix)
+    label = np.array(modified_matrix_coupling)
+
+    return feature, label
