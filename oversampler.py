@@ -41,6 +41,22 @@ def normal_noise(coulomb_matrix:np.ndarray, size:int, shape:tuple, standard_devi
     
     return cm_list
 
+def uniform_noise(coulomb_matrix:np.ndarray, size:int, shape:tuple, min_max:tuple[float, float] = (0.98, 1.02)):
+    """
+    this function add a noise draw from uniform distribution to the coulomb matrix to generatea a noisy dataset
+    """
+
+    
+    cm_list = []
+    for _ in range(size):
+        
+        random_noise = np.random.uniform(low = min_max[0], high = min_max[1], size = shape)
+        altered_cm = random_noise*coulomb_matrix
+
+        cm_list.append(altered_cm)
+    
+    return cm_list
+
 
 def gen_noisy_dataset(coulomb_matrix:np.ndarray, coupling:np.ndarray, duplication_count:int)->tuple[np.ndarray, np.ndarray]:
     """
@@ -71,3 +87,23 @@ def gen_noisy_dataset(coulomb_matrix:np.ndarray, coupling:np.ndarray, duplicatio
     label = np.array(modified_matrix_coupling)
 
     return feature, label
+
+def gen_uniform_noise_dataset(coulomb_matrix:np.ndarray, coupling:np.ndarray, duplication_count:int):
+
+    modified_matrix = []
+    modified_matrix_coupling = []
+
+    for Matrix, Coupling in zip(coulomb_matrix, coupling):
+        
+        noisy_matrices = uniform_noise(Matrix, size = duplication_count, shape = Matrix.shape, min_max = (0.98, 1.02))
+        list_of_generated_matrix = [Matrix] + noisy_matrices
+        list_of_coupling = [Coupling]*(duplication_count+1)
+        
+        modified_matrix += list_of_generated_matrix
+        modified_matrix_coupling += list_of_coupling
+
+    feature = np.array(modified_matrix)
+    label = np.array(modified_matrix_coupling)
+
+    return feature, label
+

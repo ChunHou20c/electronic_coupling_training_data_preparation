@@ -8,3 +8,12 @@ new_feature, new_coupling = gen_noisy_dataset(matrix, coupling, duplication_coun
 
 #then use new_feature and new_coupling to train model
 ```
+
+```
+matrix:np.ndarray #this is your matrix data
+coupling:np.ndarray #this is coupling
+
+new_feature, new_coupling = gen_uniform_noise_dataset(matrix, coupling, duplication_count = 100)
+
+#then use new_feature and new_coupling to train model
+```
